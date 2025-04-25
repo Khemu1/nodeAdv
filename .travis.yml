@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - "22"
+dist: focal  #specific version of linux
+services: # the services we already use
+  -mongodb
+  -redis-server
+env: # define env vars
+  - NODE_ENV=ci PORT=3000
+cache: # will speed the build up by caching node_modules when travis clones from github
+  directories:
+    - node_modules
+    - client/node_modules
+install:
+  - npm install
+  - npm run build
+script: # will be using it to run tests
+  - nohup npm run start &
+  - sleep 3
+  - npm run test
